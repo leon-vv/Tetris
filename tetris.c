@@ -9,11 +9,13 @@
 #include "nanovg/src/nanovg_gl.h"
 
 #include "utils.c"
+#include "tetronimo.c"
 
 int main() {
 
 	GLFWwindow *window = create_window();
 	NVGcontext *vg = create_vg();
+	
 
 	return 0;
 }
