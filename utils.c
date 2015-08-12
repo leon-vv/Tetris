@@ -32,16 +32,41 @@ create_window()
 
 	if(glewInit() != GLEW_OK) error("Could not init glew");
 	glGetError();
-
+	
 	return window;
 }
 
 NVGcontext*
 create_vg()
 {
-	NVGcontext *vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_DEBUG);
+	NVGcontext *vg = nvgCreateGL3(NVG_DEBUG);
+
+	glDisable(GL_BLEND);
+	glClearColor(1,1,1,1);
 
 	if(vg == NULL) error("Could not init nanovg");
 	
 	return vg;
+}
+
+void
+begin_frame(GLFWwindow *w, NVGcontext *c)
+{
+	int win_width, win_height, fb_width, fb_height;
+	glfwGetWindowSize(w, &win_width, &win_height);
+	glfwGetFramebufferSize(w, &fb_width, &fb_height);
+	float px_ratio = (float)fb_width / (float)fb_height;
+	
+	glViewport(0, 0, fb_width, fb_height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	nvgBeginFrame(c, win_width, win_height, px_ratio);
+}
+
+void
+end_frame(GLFWwindow *w, NVGcontext *c)
+{
+	nvgEndFrame(c);
+	glfwSwapBuffers(w);
+	glfwWaitEvents();
 }
