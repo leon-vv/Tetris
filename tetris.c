@@ -34,6 +34,31 @@ new_tetr(board b, unsigned *lines)
 }
 
 void
+fall()
+{
+	blocks blcks;
+	active_tetr_to_board_coord(active_t, blcks);
+	
+	int valid_downs = -1;
+
+	for(int i = 0; i < 4; i++) {
+
+		int j = 0;
+		for(; j < 20 && b[j][blcks[i].x] == WHITE; j++) {}
+
+		int current_valid = j - blcks[i].y - 1;
+
+		if(current_valid < valid_downs || valid_downs == -1)
+			valid_downs = current_valid;
+	}
+
+	for(int i = 0; i < valid_downs; i++)
+		active_t.upper_left.y += 1;
+
+	new_tetr(b, &lines);
+}
+
+void
 down()
 {
 	blocks blcks;
@@ -92,6 +117,10 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 				break;
 			case GLFW_KEY_DOWN:
 				down();
+				break;
+			case GLFW_KEY_SPACE:
+				puts("fall");
+				fall();
 				break;
 		};
 	}
