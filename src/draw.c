@@ -117,7 +117,7 @@ draw_game(NVGcontext *vg,
 
 		
 	draw_text(vg,
-			.70 * win_width,	
+			.60 * win_height,	
 			y + 30,
 			lines);
 
