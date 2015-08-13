@@ -13,7 +13,7 @@ copy_tetr_to_board(struct active_tetronimo t, board brd)
 }
 
 void
-check_full(board b)
+check_full(board b, unsigned *lines)
 {
 	const enum color empty_line[10] = {WHITE};
 	int c_size = sizeof(enum color);	
@@ -25,6 +25,7 @@ outer:
 		for(; j < 10; j++)
 			if(b[i][j] != BLACK) goto outer;
 
+		*lines += 1;
 		memmove(b + 1, b, i * 10 * c_size);
 		memcpy(b, empty_line, 10 * c_size);
 	}

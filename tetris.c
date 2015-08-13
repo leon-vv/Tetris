@@ -21,12 +21,13 @@ board b;
 
 NVGcontext *vg;
 struct active_tetronimo active_t;
+unsigned lines = 0;
 
 void
-new_tetr()
+new_tetr(board b, unsigned *lines)
 {
 	copy_tetr_to_board(active_t, b);
-	check_full(b);
+	check_full(b, lines);
 
 	active_t.tetr = tetronimos[rand() % 7];
 	active_t.upper_left = (struct point){4, -1};
@@ -40,7 +41,7 @@ down()
 
 	for(int i = 0; i < 4; i++)
 		if(blcks[i].y == 19 || b[blcks[i].y + 1][blcks[i].x] == BLACK) {
-			new_tetr();
+			new_tetr(b, &lines);
 			return;
 		}
 
@@ -130,7 +131,7 @@ int main()
 			glfwSetTime(0.0);
 		}
 
-		draw_game(vg, window, b, active_t);
+		draw_game(vg, window, b, active_t, lines);
 	}
 
 	return 0;

@@ -74,10 +74,25 @@ draw_tetronimo(NVGcontext *vg,
 }
 
 void
+draw_text(NVGcontext *vg,
+		float x,
+		float y,
+		unsigned lines)
+{
+	nvgFontFace(vg, "robo");
+	nvgFontSize(vg, 50);
+	nvgFillColor(vg, nvgRGB(0, 0, 0));
+	char buffer[10];
+	sprintf(buffer, "%u", lines);
+	nvgText(vg, x, y, buffer, NULL);
+}
+
+void
 draw_game(NVGcontext *vg,
 		GLFWwindow *window,
 		board b,
-		struct active_tetronimo at)
+		struct active_tetronimo at,
+		unsigned lines)
 {
 	begin_frame(window, vg);
 
@@ -86,11 +101,11 @@ draw_game(NVGcontext *vg,
 
 	float x = .05 * win_width;
 	float y =.05 * win_height;
-	float board_width = .60 * win_width;
+	float board_width = .45 * win_height;
 	float board_height = .90 * win_height;
 
 	draw_outline(vg, x, y, board_width, board_height);
-
+	
 	// The stroke is applied with the path in the middle of the stroke.
 	// Therefore to incalculate the width of the outline, we have to
 	// decrease the width of the board with half the width of the left stroke
@@ -99,6 +114,12 @@ draw_game(NVGcontext *vg,
 	board_height -= OUTLINE_WIDTH;
 	x += OUTLINE_WIDTH / 2.0;
 	y += OUTLINE_WIDTH / 2.0;
+
+		
+	draw_text(vg,
+			.70 * win_width,	
+			y + 30,
+			lines);
 
 	float cell_w = board_width / 10;
 	float cell_h = board_height / 20;
