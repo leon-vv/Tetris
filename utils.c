@@ -28,6 +28,7 @@ create_window()
 	}
 
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 	glewExperimental = GL_TRUE;
 
 	if(glewInit() != GLEW_OK) error("Could not init glew");
@@ -68,5 +69,4 @@ end_frame(GLFWwindow *w, NVGcontext *c)
 {
 	nvgEndFrame(c);
 	glfwSwapBuffers(w);
-	glfwWaitEvents();
 }

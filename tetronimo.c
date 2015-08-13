@@ -1,4 +1,3 @@
-
 // X or Y Coordinate
 typedef signed char coord;
 
@@ -11,7 +10,7 @@ typedef struct point blocks[4];
 
 struct tetronimo {
 	// Dimension of the square area a tetronimo rotates in
-	const unsigned char size;
+	unsigned char size;
 
 	blocks b;
 };
@@ -24,6 +23,11 @@ enum tetronimo_type {
 	Z = 4,
 	J = 5,
 	L = 6
+};
+
+struct active_tetronimo {
+	struct tetronimo tetr;
+	struct point upper_left;
 };
 
 const struct tetronimo tetronimos[7] = {
@@ -84,3 +88,6 @@ translate_upper_left_to_origin(struct tetronimo t, blocks b)
 	for(int i = 0; i < 4; i++) 
 		b[i] = (struct point){t.b[i].x + tx, t.b[i].y + ty};
 }
+
+
+

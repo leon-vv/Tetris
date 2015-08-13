@@ -43,22 +43,29 @@ draw_blocks(NVGcontext *vg,
 
 void
 draw_tetronimo(NVGcontext *vg,
-		struct tetronimo t,
+		struct active_tetronimo t,
 		float x,
 		float y,
 		float cell_w,
 		float cell_h)
 {
 	blocks b;
-	translate_upper_left_to_origin(t, b);
+	translate_upper_left_to_origin(t.tetr, b);
 	
+	float upper_left_x = x + t.upper_left.x * cell_w;
+	float upper_left_y = y + t.upper_left.y * cell_h;
+
 	for(int i = 0; i < 4; i++) {
 		struct point p = b[i];	
 
+		float new_y = upper_left_y + (p.y/2) * cell_h;
+
+		if(new_y < y) continue;
+
 		nvgBeginPath(vg);
 		nvgRect(vg,
-				x + (p.x/2) * cell_w,
-				y + (p.y/2) * cell_h,
+				upper_left_x + (p.x/2) * cell_w,
+				new_y,
 				cell_w,
 				cell_h);
 		nvgFillColor(vg, nvg_colors[BLACK]);
@@ -67,13 +74,16 @@ draw_tetronimo(NVGcontext *vg,
 }
 
 void
-draw_board_and_tetronimo(NVGcontext *vg,
+draw_game(NVGcontext *vg,
+		GLFWwindow *window,
 		board b,
-		int win_width,
-		int win_height,
-		struct tetronimo t,
-		struct point upper_left)
+		struct active_tetronimo at)
 {
+	begin_frame(window, vg);
+
+	int win_width, win_height;
+	glfwGetWindowSize(window, &win_width, &win_height);
+
 	float x = .05 * win_width;
 	float y =.05 * win_height;
 	float board_width = .60 * win_width;
@@ -95,7 +105,9 @@ draw_board_and_tetronimo(NVGcontext *vg,
 
 	draw_blocks(vg, b, x, y, cell_w, cell_h);
 
-	x += upper_left.x * cell_w;
-	y += upper_left.y * cell_h;
-	draw_tetronimo(vg, t, x, y, cell_w, cell_h);
+	//x += at.upper_left.x * cell_w;
+	//y += at.upper_left.y * cell_h;
+	draw_tetronimo(vg, at, x, y, cell_w, cell_h);
+
+	end_frame(window, vg);
 }
