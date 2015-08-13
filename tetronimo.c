@@ -53,30 +53,6 @@ const NVGcolor nvg_colors[2] = {
 // 20 rows of 10 cells
 typedef enum color board[20][10];
 
-// Rotate clockwise
-// This function uses a rotation matrix:
-// [  0 1 ]
-// [ -1 0 ]
-// multiplications with 0 are left out
-void
-rotate_cw(blocks b)
-{
-	for(int i = 0; i < 4; i++)
-		b[i] = (struct point){b[i].y, -b[i].x};
-}
-
-// Rotate counter clockwise
-// This function uses a rotation matrix:
-// [ 0 -1 ]
-// [ 1  0 ]
-// multiplications with 0 are left out
-void
-rotate_ccw(blocks b)
-{
-	for(int i = 0; i < 4; i++)
-		b[i] = (struct point){-b[i].y, b[i].x};
-}
-
 // Translates the blocks such that the upper left block
 // is at position (0, 0)
 void

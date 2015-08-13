@@ -14,13 +14,13 @@
 #define OUTLINE_WIDTH 2
 
 #include "tetronimo.c"
-board b;
+#include "collision.c"
 #include "utils.c"
 #include "draw.c"
-#include "collision.c"
 
 NVGcontext *vg;
 struct active_tetronimo active_t;
+board b;
 unsigned lines = 0;
 
 void
@@ -107,7 +107,7 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 	if(action == GLFW_PRESS || action == GLFW_REPEAT) {
 		switch (key) {
 			case GLFW_KEY_UP:
-				rotate_cw(active_t.tetr.b);
+				rotate_cw_if_valid(&active_t, b);
 				break;
 			case GLFW_KEY_LEFT:
 				left();
