@@ -8,10 +8,37 @@ struct point {
 
 typedef struct point blocks[4];
 
+enum color {
+	WHITE = 0,
+	BLACK,
+	CYAN,
+	YELLOW,
+	PURPLE,
+	LIME,
+	RED,
+	BLUE,
+	ORANGE
+};
+
+const NVGcolor nvg_colors[9] = {
+	(NVGcolor) {1.0, 1.0, 1.0, 1.0},
+	(NVGcolor) {0.0, 0.0, 0.0, 1.0},
+
+	(NVGcolor) {0.0, 1.0, 1.0, 1.0},
+	(NVGcolor) {1.0, 1.0, 0.0, 1.0},
+	(NVGcolor) {.5, 0.0, .5, 1.0},
+	(NVGcolor) {0.0, 1.0, 0.0, 1.0},
+	(NVGcolor) {1.0, 0.0, 0.0, 1.0},
+	(NVGcolor) {0.0, 0.0, 1.0, 1.0},
+	(NVGcolor) {1.0, .647, 0.0, 1.0},
+};
+
+
 struct tetronimo {
 	// Dimension of the square area a tetronimo rotates in
 	unsigned char size;
-
+	
+	enum color c;	
 	blocks b;
 };
 
@@ -31,23 +58,13 @@ struct active_tetronimo {
 };
 
 const struct tetronimo tetronimos[7] = {
-	{8, {{-3, 1}, {-1, 1}, {1, 1}, {3, 1}}},
-	{4, {{-1, 1}, {1, 1}, {-1, -1}, {1, -1}}},
-	{6, {{0, 2}, {-2, 0}, {0, 0}, {2, 0}}},
-	{6, {{0, 2}, {2, 2}, {-2, 0}, {0, 0}}},
-	{6, {{-2, 2}, {0, 2}, {0, 0}, {2, 0}}},
-	{6, {{-2, 2}, {-2, 0}, {0, 0}, {2, 0}}},
-	{6, {{-2, 0}, {0, 0}, {2, 0}, {2, 2}}}
-};
-
-enum color {
-	WHITE = 0,
-	BLACK = 1
-};
-
-const NVGcolor nvg_colors[2] = {
-	(NVGcolor) {1.0, 1.0, 1.0, 1.0},
-	(NVGcolor) {0.0, 0.0, 0.0, 1.0}
+	{8, CYAN, {{-3, 1}, {-1, 1}, {1, 1}, {3, 1}}},
+	{4, YELLOW, {{-1, 1}, {1, 1}, {-1, -1}, {1, -1}}},
+	{6, PURPLE, {{0, 2}, {-2, 0}, {0, 0}, {2, 0}}},
+	{6, RED, {{0, 2}, {2, 2}, {-2, 0}, {0, 0}}},
+	{6, LIME, {{-2, 2}, {0, 2}, {0, 0}, {2, 0}}},
+	{6, ORANGE, {{-2, 2}, {-2, 0}, {0, 0}, {2, 0}}},
+	{6, BLUE, {{-2, 0}, {0, 0}, {2, 0}, {2, 2}}}
 };
 
 // 20 rows of 10 cells

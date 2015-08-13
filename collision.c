@@ -23,7 +23,7 @@ is_valid(struct active_tetronimo t, board brd)
 		if(current.y > 19
 				|| current.x > 9
 				|| current.x < 0
-				|| brd[current.y][current.x] == BLACK) {
+				|| brd[current.y][current.x] != 0) {
 			return false;
 		}
 	}
@@ -59,7 +59,7 @@ copy_tetr_to_board(struct active_tetronimo t, board brd)
 	for(int i = 0; i < 4; i++) {
 		int y = t.upper_left.y + blks[i].y/2;
 		int x = t.upper_left.x + blks[i].x/2;
-		brd[y][x] = BLACK;
+		brd[y][x] = t.tetr.c;
 	}
 }
 
@@ -74,7 +74,7 @@ outer:
 	for(i++; i < 20;) {
 		int j = 0;
 		for(; j < 10; j++)
-			if(b[i][j] != BLACK) goto outer;
+			if(b[i][j] == WHITE) goto outer;
 
 		*lines += 1;
 		memmove(b + 1, b, i * 10 * c_size);

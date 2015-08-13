@@ -64,12 +64,21 @@ down()
 	blocks blcks;
 	active_tetr_to_board_coord(active_t, blcks);
 
-	for(int i = 0; i < 4; i++)
-		if(blcks[i].y == 19 || b[blcks[i].y + 1][blcks[i].x] == BLACK) {
+	for(int i = 0; i < 4; i++) {
+
+		if(blcks[i].y == 19
+				|| (blcks[i].y != -2 && b[blcks[i].y + 1][blcks[i].x] != WHITE)) {
+			
+			if(blcks[i].y == -1) {
+				printf("You got a score of %u!\n", lines);
+				exit(0);
+			}
+
 			new_tetr(b, &lines);
 			return;
 		}
-
+	}
+	
 
 	active_t.upper_left.y += 1;
 }
@@ -119,7 +128,6 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 				down();
 				break;
 			case GLFW_KEY_SPACE:
-				puts("fall");
 				fall();
 				break;
 		};

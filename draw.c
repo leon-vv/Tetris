@@ -68,7 +68,7 @@ draw_tetronimo(NVGcontext *vg,
 				new_y,
 				cell_w,
 				cell_h);
-		nvgFillColor(vg, nvg_colors[BLACK]);
+		nvgFillColor(vg, nvg_colors[t.tetr.c]);
 		nvgFill(vg);
 	}
 }
