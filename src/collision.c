@@ -20,10 +20,11 @@ is_valid(struct active_tetronimo t, board brd)
 	for(int i = 0; i < 4; i++) {
 		struct point current = coords[i];
 
-		if(current.y > 19
+		if(current.y > 0 &&
+				(current.y > 19
 				|| current.x > 9
 				|| current.x < 0
-				|| brd[current.y][current.x] != 0) {
+				|| brd[current.y][current.x] != 0)) {
 			return false;
 		}
 	}
