@@ -17,6 +17,12 @@ git clone --recursive https://github.com/leon-vv/tetris
 make run
 ```
 
+The time it takes for a tetronimo to move down, is configurable.
+Simply pass the amount of seconds a 'step' should take:
+```Bash
+./build/tetris 1.23
+```
+
 ## License
 
 GPL3
