@@ -135,17 +135,23 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 }
 
 void*
-time_func()
+time_func(void *arg)
 {
-	const struct timespec time = {0, 500000000L};
+	double delay = *(double*)arg;
+	int sec = delay;
+	// Three digits of accuracy
+	long milliseconds = (delay - (double)sec) * (double)1000;
 
+	struct timespec time = {sec, milliseconds * 1000000};
+
+	int counter = 0;
 	for(;;) {
 		glfwPostEmptyEvent();
 		nanosleep(&time, NULL);
 	}
 }
 
-int main()
+int main(int argc, char** argv)
 {
 	GLFWwindow *window = create_window();
 	vg = create_vg(window);
@@ -157,13 +163,18 @@ int main()
 	active_t.tetr = tetronimos[rand() % 7];
 	active_t.upper_left = (struct point){4, -1};
 
+	double *delay = malloc(sizeof(double));
+
+	*delay = argc < 2 ? .5 : strtof(argv[1], NULL);
+
 	pthread_t time_thread;
-	pthread_create(&time_thread, NULL, time_func, NULL);
+	pthread_create(&time_thread, NULL, time_func, (void*)delay);
+
 
 	while(!glfwWindowShouldClose(window)) {
 		glfwWaitEvents();
 
-		if(glfwGetTime() > .5) {
+		if(glfwGetTime() > *delay) {
 			down();
 			glfwSetTime(0.0);
 		}
