@@ -9,15 +9,12 @@ It uses [nanovg](https://github.com/memononen/nanovg) for rendering and thus Ope
 
 ## Usage
 
+Dependencies: premake4, glew, glfw3
+(available on Debian as: premake4, libglew-dev, and glfw3)
+
 ```Bash
 git clone --recursive https://github.com/leon-vv/tetris
-cd tetris/nanovg
-premake4 gmake
-cd build
-make nanovg config=release
-cd ../..
-make
-./build/tetris
+make run
 ```
 
 ## License
