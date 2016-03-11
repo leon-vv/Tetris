@@ -19,26 +19,23 @@
 #include "draw.c"
 
 NVGcontext *vg;
-struct active_tetronimo active_t;
+struct active_tetronimo active_tetr;
 board b;
 unsigned lines = 0;
 
 void
 new_tetr(board b, unsigned *lines)
 {
-	copy_tetr_to_board(active_t, b);
+	copy_tetr_to_board(active_tetr, b);
 	check_full(b, lines);
 
-	active_t.tetr = tetronimos[rand() % 7];
-	active_t.upper_left = (struct point){4, -1};
+	active_tetr.tetr = tetronimos[rand() % 7];
+	active_tetr.upper_left = (struct point){4, -1};
 }
 
 void
-fall()
+fall(blocks blcks)
 {
-	blocks blcks;
-	active_tetr_to_board_coord(active_t, blcks);
-	
 	int valid_downs = -1;
 
 	for(int i = 0; i < 4; i++) {
@@ -53,17 +50,22 @@ fall()
 	}
 
 	for(int i = 0; i < valid_downs; i++)
-		active_t.upper_left.y += 1;
+		active_tetr.upper_left.y += 1;
 
 	new_tetr(b, &lines);
 }
 
 void
-down()
+with_active_board_coords(void (*callback)(blocks))
 {
 	blocks blcks;
-	active_tetr_to_board_coord(active_t, blcks);
+	active_tetr_to_board_coord(active_tetr, blcks);
+	callback(blcks);
+}
 
+void
+down(blocks blcks)
+{
 	for(int i = 0; i < 4; i++) {
 
 		if(blcks[i].y == 19
@@ -80,33 +82,39 @@ down()
 	}
 	
 
-	active_t.upper_left.y += 1;
+	active_tetr.upper_left.y += 1;
 }
 
 void
-left()
+left(blocks blcks)
 {
-	blocks blcks;
-	active_tetr_to_board_coord(active_t, blcks);
+	for(int i = 0; i < 4; i++) {
+		struct point current = blcks[i];		
 
-	for(int i = 0; i < 4; i++)
-		if(blcks[i].x == 0 || b[blcks[i].y][blcks[i].x - 1] == BLACK)
-			return;
+		// If the tetronimo stick above the top border
+		// we do not want to block the movement
+		if(current.y < 0) continue;
 
-	active_t.upper_left.x -= 1;
+		// Block the movement
+		if(current.x == 0
+			|| b[current.y][current.x - 1] != WHITE) return;
+	}
+
+	active_tetr.upper_left.x -= 1;
 }
 
 void
-right()
+right(blocks blcks)
 {
-	blocks blcks;
-	active_tetr_to_board_coord(active_t, blcks);
-
 	for(int i = 0; i < 4; i++)
-		if(blcks[i].x == 9 || b[blcks[i].y][blcks[i].x + 1] == BLACK)
-			return;
+	{
+		struct point current = blcks[i];
 
-	active_t.upper_left.x += 1;
+		if(current.x == 9 || b[current.y][current.x + 1] != WHITE)
+			return;
+	}
+
+	active_tetr.upper_left.x += 1;
 }
 
 void
@@ -116,19 +124,19 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 	if(action == GLFW_PRESS || action == GLFW_REPEAT) {
 		switch (key) {
 			case GLFW_KEY_UP:
-				rotate_cw_if_valid(&active_t, b);
+				rotate_cw_if_valid(&active_tetr, b);
 				break;
 			case GLFW_KEY_LEFT:
-				left();
+				with_active_board_coords(left);
 				break;
 			case GLFW_KEY_RIGHT:
-				right();
+				with_active_board_coords(right);
 				break;
 			case GLFW_KEY_DOWN:
-				down();
+				with_active_board_coords(down);
 				break;
 			case GLFW_KEY_SPACE:
-				fall();
+				with_active_board_coords(fall);
 				break;
 		};
 	}
@@ -144,7 +152,6 @@ time_func(void *arg)
 
 	struct timespec time = {sec, milliseconds * 1000000};
 
-	int counter = 0;
 	for(;;) {
 		glfwPostEmptyEvent();
 		nanosleep(&time, NULL);
@@ -160,8 +167,8 @@ int main(int argc, char** argv)
 
 	srand(time(NULL));
 
-	active_t.tetr = tetronimos[rand() % 7];
-	active_t.upper_left = (struct point){4, -1};
+	active_tetr.tetr = tetronimos[rand() % 7];
+	active_tetr.upper_left = (struct point){4, -1};
 
 	double *delay = malloc(sizeof(double));
 
@@ -175,12 +182,14 @@ int main(int argc, char** argv)
 		glfwWaitEvents();
 
 		if(glfwGetTime() > *delay) {
-			down();
+			with_active_board_coords(down);
 			glfwSetTime(0.0);
 		}
 
-		draw_game(vg, window, b, active_t, lines);
+		draw_game(vg, window, b, active_tetr, lines);
 	}
+
+	free(delay);
 
 	return 0;
 }
