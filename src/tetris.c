@@ -1,4 +1,3 @@
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <time.h>
@@ -146,11 +145,11 @@ void*
 time_func(void *arg)
 {
 	double delay = *(double*)arg;
-	int sec = delay;
-	// Three digits of accuracy
-	long milliseconds = (delay - (double)sec) * (double)1000;
 
-	struct timespec time = {sec, milliseconds * 1000000};
+	struct timespec time;
+
+	time.tv_sec = delay; // Rounded by int conversion
+	time.tv_nsec = (delay - (double)time.tv_sec) * (double)1e9;
 
 	for(;;) {
 		glfwPostEmptyEvent();
