@@ -141,6 +141,7 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 	}
 }
 
+/*
 void*
 time_func(void *arg)
 {
@@ -156,6 +157,7 @@ time_func(void *arg)
 		nanosleep(&time, NULL);
 	}
 }
+*/
 
 int main(int argc, char** argv)
 {
@@ -169,26 +171,28 @@ int main(int argc, char** argv)
 	active_tetr.tetr = tetronimos[rand() % 7];
 	active_tetr.upper_left = (struct point){4, -1};
 
-	double *delay = malloc(sizeof(double));
+	double delay = argc < 2 ? .5 : strtof(argv[1], NULL);
 
-	*delay = argc < 2 ? .5 : strtof(argv[1], NULL);
+	struct timespec time;
 
-	pthread_t time_thread;
-	pthread_create(&time_thread, NULL, time_func, (void*)delay);
+	time.tv_sec = 0;
+	time.tv_nsec = 20e6; // 20 milliseconds
 
 
 	while(!glfwWindowShouldClose(window)) {
-		glfwWaitEvents();
+		// glfwPostEmptyEvent() or glfwWaitEventsTimeout()
+		// would be better, but these are not included in the version
+		// of GLFW packaged with Debian stable
+		nanosleep(&time, NULL);
+		glfwPollEvents();
 
-		if(glfwGetTime() > *delay) {
+		if(glfwGetTime() > delay) {
 			with_active_board_coords(down);
 			glfwSetTime(0.0);
 		}
 
 		draw_game(vg, window, b, active_tetr, lines);
 	}
-
-	free(delay);
 
 	return 0;
 }
