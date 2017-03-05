@@ -1,3 +1,4 @@
+
 void
 draw_outline(NVGcontext *vg, float x, float y, float width, float height)
 {
@@ -99,10 +100,11 @@ draw_game(NVGcontext *vg,
 	int win_width, win_height;
 	glfwGetWindowSize(window, &win_width, &win_height);
 
-	float x = .05 * win_width;
-	float y =.05 * win_height;
-	float board_width = .45 * win_height;
+	float board_width = .44 * win_width;
 	float board_height = .90 * win_height;
+
+	float x = (win_width - board_width) / 2;
+	float y = .05 * win_height;
 
 	draw_outline(vg, x, y, board_width, board_height);
 	
@@ -116,9 +118,11 @@ draw_game(NVGcontext *vg,
 	y += OUTLINE_WIDTH / 2.0;
 
 		
+	printf("%f\n", y);
+
 	draw_text(vg,
-			.60 * win_height,	
-			y + 30,
+			x + board_width + 55,
+			y + 45,
 			lines);
 
 	float cell_w = board_width / 10;
