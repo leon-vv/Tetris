@@ -60,7 +60,8 @@ copy_tetr_to_board(struct active_tetronimo t, board brd)
 	for(int i = 0; i < 4; i++) {
 		int y = t.upper_left.y + blks[i].y/2;
 		int x = t.upper_left.x + blks[i].x/2;
-		brd[y][x] = t.tetr.c;
+
+	    if(y >= 0 && y < 20 && x >= 0 && x < 10) brd[y][x] = t.tetr.c;
 	}
 }
 
