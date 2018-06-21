@@ -164,7 +164,6 @@ int main(int argc, char** argv)
 		// glfwPostEmptyEvent() or glfwWaitEventsTimeout()
 		// would be better, but these are not included in the version
 		// of GLFW packaged with Debian stable
-		nanosleep(&time, NULL);
 		glfwPollEvents();
 
 		if(glfwGetTime() > delay) {
