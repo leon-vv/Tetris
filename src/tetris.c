@@ -155,6 +155,9 @@ int main(int argc, char** argv)
 
 	double delay = argc < 2 ? .5 : strtof(argv[1], NULL);
 
+    int font = nvgCreateFont(vg, "robo", "./nanovg/example/Roboto-Regular.ttf");
+	if(font == -1)
+		error("Failed to find font at location ./nanovg/example/Roboto-Regular.ttf");
 
 
 	while(!glfwWindowShouldClose(window)) {

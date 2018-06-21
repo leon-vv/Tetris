@@ -58,10 +58,6 @@ begin_frame(GLFWwindow *w, NVGcontext *c)
 	glfwGetFramebufferSize(w, &fb_width, &fb_height);
 	float px_ratio = (float)fb_width / (float)fb_height;
 	
-	int font = nvgCreateFont(c, "robo", "./nanovg/example/Roboto-Regular.ttf");
-	if(font == -1)
-		error("Failed to find font at location ./nanovg/example/Roboto-Regular.ttf");
-
 	glViewport(0, 0, fb_width, fb_height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
