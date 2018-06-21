@@ -117,9 +117,6 @@ draw_game(NVGcontext *vg,
 	x += OUTLINE_WIDTH / 2.0;
 	y += OUTLINE_WIDTH / 2.0;
 
-		
-	printf("%f\n", y);
-
 	draw_text(vg,
 			x + board_width + 55,
 			y + 45,
