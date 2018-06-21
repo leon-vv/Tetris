@@ -141,24 +141,6 @@ ticker(GLFWwindow *window, int key, int scancode, int action, int mods)
 	}
 }
 
-/*
-void*
-time_func(void *arg)
-{
-	double delay = *(double*)arg;
-
-	struct timespec time;
-
-	time.tv_sec = delay; // Rounded by int conversion
-	time.tv_nsec = (delay - (double)time.tv_sec) * (double)1e9;
-
-	for(;;) {
-		glfwPostEmptyEvent();
-		nanosleep(&time, NULL);
-	}
-}
-*/
-
 int main(int argc, char** argv)
 {
 	GLFWwindow *window = create_window();
@@ -173,10 +155,6 @@ int main(int argc, char** argv)
 
 	double delay = argc < 2 ? .5 : strtof(argv[1], NULL);
 
-	struct timespec time;
-
-	time.tv_sec = 0;
-	time.tv_nsec = 20e6; // 20 milliseconds
 
 
 	while(!glfwWindowShouldClose(window)) {
